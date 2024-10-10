@@ -1,5 +1,5 @@
 
-# Backend API Ecom System
+# Quizhub Backend API
 
 ## Prerequisites
 - Docker and Docker Compose installed on your machine

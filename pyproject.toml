@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "be-ecom-api"
+name = "quizhub"
 version = "0.1.0"
 description = "Backend API DRF"
 authors = ["sohan"]
