@@ -11,11 +11,12 @@
    ```bashs
    docker-compose up --build
    ```
+   **It will create tags and questions and create superuser also**
 
-2. **Open the Poetry Shell**
-   Start a shell inside the Docker container to run management commands:
+2. **Superuser creds:** (auto generate)
    ```bash
-   docker-compose exec be poetry shell
+   username: admin@admin.com
+   password: admin321
    ```
 
 3. **Create Database Tables**
@@ -35,6 +36,11 @@
 
 6. **Access the Django Admin Interface**
    The Django admin interface will be available at [http://localhost:8000/admin](http://localhost:8000/admin).
+
+7. **Postman Collections**
+   ```
+   https://api.postman.com/collections/18762711-d54d2f16-475f-4322-a45e-00185f1acbf2?access_key=PMAT-01J9XGMGT5Z4E229DT6BGQ1QSV
+   ```
 
 <!-- ## Running Tests -->
 

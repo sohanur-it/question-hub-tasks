@@ -107,13 +107,13 @@ class TagsWithQuestionView(APIView):
             ),
         ]
     )
-
     def get(self, request):
         user = request.user
         
         is_read = request.query_params.get('is_read')
         is_favorite = request.query_params.get('is_favorite')
 
+        # Get all parent tags and annotate them
         parent_tags = Tag.objects.filter(parent__isnull=True).prefetch_related('children').annotate(
             favorite_question_count=Count(
                 'questions__favorites',
@@ -125,8 +125,13 @@ class TagsWithQuestionView(APIView):
             )
         ).order_by('id')
 
+        # Apply pagination to the parent tags
+        paginator = self.pagination_class()
+        paginated_parent_tags = paginator.paginate_queryset(parent_tags, request)
+
         response_data = []
 
+        # Helper function to build the tag data recursively
         def build_tag_data(tag):
             questions = tag.questions.all()
 
@@ -144,8 +149,7 @@ class TagsWithQuestionView(APIView):
                 elif is_favorite.lower() == 'false':
                     questions = questions.exclude(favorites__is_favorite=True, favorites__user=user)
 
-            # Paginate the questions
-            paginator = self.pagination_class()
+            # Paginate the questions under the tag
             paginated_questions = paginator.paginate_queryset(questions, request)
 
             # Serialize the paginated questions
@@ -161,6 +165,7 @@ class TagsWithQuestionView(APIView):
                 'children': []
             }
 
+            # Get child tags and annotate them
             child_tags = tag.children.all().annotate(
                 favorite_question_count=Count(
                     'questions__favorites',
@@ -172,15 +177,19 @@ class TagsWithQuestionView(APIView):
                 )
             )
 
+            # Recursively build child tag data
             for child_tag in child_tags:
                 tag_data['children'].append(build_tag_data(child_tag))
 
             return tag_data
 
-        for tag in parent_tags:
+        # Iterate over paginated tags and build response data
+        for tag in paginated_parent_tags:
             response_data.append(build_tag_data(tag))
 
-        return Response(response_data, status=200)
+        # Return paginated response with the data
+        return paginator.get_paginated_response(response_data)
+
 
 
 class ParentTagsAPIView(APIView):
