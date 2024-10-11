@@ -21,6 +21,7 @@ drf-yasg = "^1.21.7"
 django = ">=4.2.0,<4.3.0"
 setuptools = "^75.1.0"
 pillow = "^10.4.0"
+djangorestframework-simplejwt = '*'
 
 [build-system]
 requires = ["poetry-core"]

@@ -33,6 +33,9 @@ RUN poetry install --no-dev
 # Copy the current directory contents into the container at /code/
 COPY . /code/
 
+# Ensure the shell script has executable permissions
+RUN chmod +x /code/initialize_data.sh
+
 # Collect static files
 RUN poetry run python -m django --version
 RUN poetry run python manage.py collectstatic --noinput
