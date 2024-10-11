@@ -14,17 +14,11 @@ class Question(models.Model):
 
     tags = models.ManyToManyField('quizhub.Tag', related_name='questions')
 
-    # is_updating_tags = models.BooleanField(default=False)
 
     def __str__(self):
         return self.question_text
 
     created_at = models.DateTimeField(auto_now_add=True)
-
-    # class Meta:
-    #     indexes = [
-    #         models.Index(fields=['created_at']),
-    #     ]
     
     def __str__(self):
         return self.question_text[:50]

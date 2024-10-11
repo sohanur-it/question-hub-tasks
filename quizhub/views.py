@@ -25,7 +25,7 @@ class QuestionsUnderTagView(APIView):
 
 
     @swagger_auto_schema(
-        security=[{'BearerAuth': []}]  # This line is important for Swagger to recognize the security
+        security=[{'BearerAuth': []}]
     )
     def get(self, request, tag_id):
         user = request.user
@@ -65,14 +65,14 @@ class QuestionsUnderTagView(APIView):
             elif is_favorite.lower() == 'false':
                 questions = questions.exclude(favorites__is_favorite=True, favorites__user=user)
 
-        # Apply pagination
+        # Apply pagination -
         paginator = self.pagination_class()
         paginated_questions = paginator.paginate_queryset(questions, request)
 
         # Serialize the paginated questions
         serializer = QuestionSerializer(paginated_questions, many=True)
         
-        # Prepare the response data
+        # Prepare response data
         response_data = {
             'tag_id': tag.id,
             'tag_name': tag.tag_name,
@@ -113,7 +113,6 @@ class TagsWithQuestionView(APIView):
         is_read = request.query_params.get('is_read')
         is_favorite = request.query_params.get('is_favorite')
 
-        # Get all parent tags and annotate them
         parent_tags = Tag.objects.filter(parent__isnull=True).prefetch_related('children').annotate(
             favorite_question_count=Count(
                 'questions__favorites',
@@ -125,34 +124,28 @@ class TagsWithQuestionView(APIView):
             )
         ).order_by('id')
 
-        # Apply pagination to the parent tags
         paginator = self.pagination_class()
         paginated_parent_tags = paginator.paginate_queryset(parent_tags, request)
 
         response_data = []
 
-        # Helper function to build the tag data recursively
         def build_tag_data(tag):
             questions = tag.questions.all()
 
-            # Apply read filter
             if is_read is not None:
                 if is_read.lower() == 'true':
                     questions = questions.filter(read__is_read=True, read__user=user)
                 elif is_read.lower() == 'false':
                     questions = questions.exclude(read__is_read=True, read__user=user)
 
-            # Apply favorite filter
             if is_favorite is not None:
                 if is_favorite.lower() == 'true':
                     questions = questions.filter(favorites__is_favorite=True, favorites__user=user)
                 elif is_favorite.lower() == 'false':
                     questions = questions.exclude(favorites__is_favorite=True, favorites__user=user)
 
-            # Paginate the questions under the tag
             paginated_questions = paginator.paginate_queryset(questions, request)
 
-            # Serialize the paginated questions
             question_serializer = QuestionSerializer(paginated_questions, many=True)
 
             tag_data = {
@@ -165,7 +158,6 @@ class TagsWithQuestionView(APIView):
                 'children': []
             }
 
-            # Get child tags and annotate them
             child_tags = tag.children.all().annotate(
                 favorite_question_count=Count(
                     'questions__favorites',
@@ -183,11 +175,9 @@ class TagsWithQuestionView(APIView):
 
             return tag_data
 
-        # Iterate over paginated tags and build response data
         for tag in paginated_parent_tags:
             response_data.append(build_tag_data(tag))
 
-        # Return paginated response with the data
         return paginator.get_paginated_response(response_data)
 
 
@@ -270,17 +260,15 @@ class TagsWithNestedCountsView(APIView):
         response_data = []
 
         def build_tag_data(tag):
-            # Create tag data without including questions
             tag_data = {
                 'tag_id': tag.id,
                 'tag_name': tag.tag_name,
                 'favorite_question_count': tag.favorite_question_count,
                 'read_question_count': tag.read_question_count,
-                'total_questions_count': tag.questions.count(),  # Total questions count
+                'total_questions_count': tag.questions.count(),
                 'children': []
             }
 
-            # Get child tags and their counts
             child_tags = tag.children.annotate(
                 favorite_question_count=Count(
                     'questions__favorites',

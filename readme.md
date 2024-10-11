@@ -11,7 +11,7 @@
    ```bashs
    docker-compose up --build
    ```
-   **It will create tags and questions and create superuser also**
+   **It will create tags and questions automatically based on a structure and will also create superuser**
 
 2. **Superuser creds:** (auto generate)
    ```bash
@@ -41,46 +41,4 @@
    ```
    https://api.postman.com/collections/18762711-d54d2f16-475f-4322-a45e-00185f1acbf2?access_key=PMAT-01J9XGMGT5Z4E229DT6BGQ1QSV
    ```
-
-<!-- ## Running Tests -->
-
-
-<!-- 1. **Run Tests**
-   To run tests, open the Poetry shell as described above and then run:
-   ```bash
-   python manage.py test
-   ```
-
-## Backend Design
-
-### Model Structure
-
-- **Incident**: Represents an incident report with fields for contact number, provider, location, description, additional info, status, and address.
-- **Provider**: Represents a provider with fields for name, description, API key, website link, and logo URL.
-- **Volunteer**: Represents a volunteer with fields for full name, contact number, location, address, activity status, notes, and assistance type.
-
-### API Structure
-
-- **Incident API**: Allows providers to create incidents. Requires API key for authentication.
-- **Volunteer API**: Provides a list of active volunteers. No authentication required.
-
-## How to Use the APIs
-
-- **Incident API**: To create an incident, make a POST request to `/api/incidents/` with the required fields and include the API key in the `Authorization` header in the format `Api-Key <your_api_key>`.
-  
-- **Volunteer API**: To retrieve the list of active volunteers, make a GET request to `/api/volunteers/`. No authentication is required.
-
-## Signals and Background Tasks
-
-- **Signals**: Used to perform actions when certain events occur, such as saving or deleting instances of models.
-- **Background Tasks**: Managed using Celery for asynchronous processing of tasks. Ensure the Celery worker is running to handle background tasks.
-
-## Troubleshooting
-
-- Ensure that Docker and Docker Compose are correctly installed.
-- Check the `.env` file for any missing or incorrect values.
-- Review the logs for Docker services to diagnose any issues.
-```
-
-This version includes updated instructions for using Poetry and running Django management commands within the Docker container. -->
 

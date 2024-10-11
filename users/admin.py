@@ -9,7 +9,6 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
     
-    # Add email field to fieldsets for admin panel user editing
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal Info', {'fields': ('first_name', 'last_name')}),
@@ -17,7 +16,6 @@ class CustomUserAdmin(UserAdmin):
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
 
-    # Add email field to add_fieldsets for admin panel user creation
     add_fieldsets = (
         (None, {
             'classes': ('wide',),

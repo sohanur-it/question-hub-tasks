@@ -19,28 +19,26 @@ admin.site.register(Tag, TagAdmin)
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    # Display the question text, tags (as a list), and correct option
     list_display = ('question_text', 'get_tags', 'correct_option') 
-    search_fields = ['question_text', 'tags__tag_name']  # Search by question text or tag name
-    list_filter = ['tags']  # Filter by tags
+    search_fields = ['question_text', 'tags__tag_name'] 
+    list_filter = ['tags']  
 
-    # Method to display tags in list_display
     def get_tags(self, obj):
-        return ", ".join([tag.tag_name for tag in obj.tags.all()])  # Join the tag names as a string
+        return ", ".join([tag.tag_name for tag in obj.tags.all()]) 
 
-    get_tags.short_description = 'Tags'  # Column name in the admin list view
+    get_tags.short_description = 'Tags'  
 
-# Register the Question model with the updated QuestionAdmin
+
 admin.site.register(Question, QuestionAdmin)
 
 @admin.register(FavoriteQuestion)
 class FavoriteQuestionAdmin(admin.ModelAdmin):
-    list_display = ('user', 'question', 'is_favorite')  # Customize display fields
-    list_filter = ('is_favorite',)  # Add filter based on favorite status
-    search_fields = ('user__email', 'question__title')  # Add search functionality for user and question
+    list_display = ('user', 'question', 'is_favorite')  
+    list_filter = ('is_favorite',)  
+    search_fields = ('user__email', 'question__title') 
 
 @admin.register(ReadQuestion)
 class ReadQuestionAdmin(admin.ModelAdmin):
-    list_display = ('user', 'question', 'is_read')  # Customize display fields
-    list_filter = ('is_read',)  # Add filter based on read status
-    search_fields = ('user__email', 'question__title')  # Add search functionality for user and question
+    list_display = ('user', 'question', 'is_read')  
+    list_filter = ('is_read',)  
+    search_fields = ('user__email', 'question__title') 
