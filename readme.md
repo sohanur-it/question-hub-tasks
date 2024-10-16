@@ -39,6 +39,6 @@
 
 7. **Postman Collections**
    ```
-   https://api.postman.com/collections/18762711-d54d2f16-475f-4322-a45e-00185f1acbf2?access_key=PMAT-01J9XGMGT5Z4E229DT6BGQ1QSV
+   https://api.postman.com/collections/18762711-d54d2f16-475f-4322-a45e-00185f1acbf2?access_key=***
    ```
 
